@@ -12,7 +12,6 @@ const NAV_ITEMS = [
   { href: '/playground/v2', label: 'Playground', icon: Terminal, badge: 'v2' },
   { href: '/batch', label: 'Batch Convert', icon: Layers },
   { href: '/dashboard', label: 'Dashboard', icon: Cloud },
-  { href: '/docs', label: 'Docs', icon: BookOpen },
 ]
 
 export default function Header() {
@@ -94,12 +93,6 @@ export default function Header() {
               </svg>
               <span>GitHub</span>
             </a>
-            <Link
-              href="/"
-              className="px-4 py-2 text-sm font-medium bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
-            >
-              Get started
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -170,15 +163,6 @@ export default function Header() {
                       </svg>
                       <span>GitHub</span>
                     </a>
-                  </li>
-                  <li className="pt-2">
-                    <Link
-                      href="/"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block w-full text-center px-4 py-3 text-base font-medium bg-white text-black rounded-lg hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
-                    >
-                      Get started
-                    </Link>
                   </li>
                 </ul>
               </nav>

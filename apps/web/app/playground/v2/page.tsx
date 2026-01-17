@@ -366,37 +366,33 @@ function PlaygroundV2Content() {
           )}
         </AnimatePresence>
 
-        {/* Main content */}
-        <div className="flex-1 grid gap-6 lg:grid-cols-[1fr,320px]">
-          {/* Left panel - Main content */}
-          <div className="space-y-6">
+        {/* Main content area with optional sidebar */}
+        <div className="flex-1 flex flex-col lg:flex-row gap-6">
+          {/* Main panel */}
+          <div className="flex-1 flex flex-col gap-6 min-w-0">
             {/* Connection Section */}
             <motion.section
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-6 rounded-2xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-xl"
+              className="p-4 md:p-6 rounded-2xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-xl"
             >
-              <div className="flex flex-col lg:flex-row lg:items-start gap-6">
-                <div className="flex-1">
-                  <TransportConfigurator
-                    value={toComponentTransport(playground.transportConfig)}
-                    onChange={handleTransportChange}
-                    disabled={isConnected || isConnecting}
-                  />
-                </div>
-                <div className="lg:w-80">
-                  <ConnectionStatus
-                    status={playground.connection.status}
-                    sessionId={playground.connection.sessionId}
-                    serverInfo={playground.connection.serverInfo}
-                    capabilities={playground.connection.capabilities as AnyCapabilities}
-                    error={playground.connection.error}
-                    onConnect={handleConnect}
-                    onDisconnect={handleDisconnect}
-                    onDismissError={playground.connection.clearError}
-                  />
-                </div>
+              <div className="flex flex-col gap-4">
+                <TransportConfigurator
+                  value={toComponentTransport(playground.transportConfig)}
+                  onChange={handleTransportChange}
+                  disabled={isConnected || isConnecting}
+                />
+                <ConnectionStatus
+                  status={playground.connection.status}
+                  sessionId={playground.connection.sessionId}
+                  serverInfo={playground.connection.serverInfo}
+                  capabilities={playground.connection.capabilities as AnyCapabilities}
+                  error={playground.connection.error}
+                  onConnect={handleConnect}
+                  onDisconnect={handleDisconnect}
+                  onDismissError={playground.connection.clearError}
+                />
               </div>
             </motion.section>
 
@@ -406,10 +402,10 @@ function PlaygroundV2Content() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="flex-1 flex flex-col min-h-[500px] rounded-2xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-xl overflow-hidden"
+                className="flex-1 flex flex-col min-h-[400px] md:min-h-[500px] rounded-2xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-xl overflow-hidden"
               >
                 {/* Tabs */}
-                <div className="p-4 border-b border-neutral-800">
+                <div className="p-3 md:p-4 border-b border-neutral-800">
                   <CapabilityTabs
                     activeTab={playground.activeTab}
                     onTabChange={playground.setActiveTab}
@@ -510,14 +506,14 @@ function PlaygroundV2Content() {
             )}
           </div>
 
-          {/* Right panel - History */}
+          {/* History sidebar - desktop */}
           <AnimatePresence>
             {showHistory && (
               <motion.aside
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="hidden lg:block"
+                className="hidden lg:block w-80 flex-shrink-0"
               >
                 <div className="sticky top-24 rounded-2xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-xl overflow-hidden">
                   <div className="p-4 border-b border-neutral-800 flex items-center justify-between">

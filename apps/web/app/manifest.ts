@@ -9,14 +9,22 @@ export default function manifest() {
     theme_color: '#3b82f6',
     icons: [
       {
-        src: '/icon-192.png',
-        sizes: '192x192',
-        type: 'image/png',
+        src: '/logo.svg',
+        sizes: 'any',
+        type: 'image/svg+xml',
+        purpose: 'any',
       },
       {
-        src: '/icon-512.png',
+        src: '/logo.svg',
+        sizes: '192x192',
+        type: 'image/svg+xml',
+        purpose: 'maskable',
+      },
+      {
+        src: '/logo.svg',
         sizes: '512x512',
-        type: 'image/png',
+        type: 'image/svg+xml',
+        purpose: 'any maskable',
       },
     ],
   };

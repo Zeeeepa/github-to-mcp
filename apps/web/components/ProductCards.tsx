@@ -37,7 +37,7 @@ const PRODUCTS = [
     title: 'Cloud Deploy',
     description: 'One-click deploy your MCP server to the cloud. Get instant endpoints, usage analytics, and API management.',
     href: '/dashboard',
-    badge: 'Revolutionary',
+    badge: 'New',
     badgeColor: 'bg-pink-500/20 text-pink-300',
     features: ['Instant deploy', 'Usage dashboard', 'API keys'],
   },
@@ -116,7 +116,7 @@ export default function ProductCards() {
           transition={{ delay: 0.1 }}
           className="text-lg text-neutral-400 max-w-2xl mx-auto"
         >
-          Everything you need to convert, test, and deploy MCP servers
+          Convert GitHub repos to MCP servers, test interactively, and deploy
         </motion.p>
       </div>
 
