@@ -1,4 +1,4 @@
-# GitHub to MCP 🚀
+# GitHub to MCP
 
 > **Convert any GitHub repo into an MCP server in seconds** — Give Claude, ChatGPT, Cursor, Windsurf, Cline, and any AI assistant instant access to any codebase.
 
@@ -7,14 +7,14 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Downloads](https://img.shields.io/npm/dm/@nirholas/github-to-mcp.svg)](https://www.npmjs.com/package/@nirholas/github-to-mcp)
 
-**🔥 Featured on:** [MCP Servers Registry](https://mcpservers.org) • [Awesome MCP Servers](https://github.com/wong2/awesome-mcp-servers)
+**Featured on:** [MCP Servers Registry](https://mcpservers.org) • [Awesome MCP Servers](https://github.com/wong2/awesome-mcp-servers)
 
 <p align="center">
-  <a href="https://github-to-mcp.vercel.app">🌐 Try the Web App</a> •
-  <a href="https://github-to-mcp.vercel.app/docs">📚 Documentation</a> •
-  <a href="#quick-start">⚡ Quick Start</a> •
-  <a href="#use-cases">💡 Use Cases</a> •
-  <a href="https://github.com/nirholas/github-to-mcp/discussions">💬 Community</a>
+  <a href="https://github-to-mcp.vercel.app">Try the Web App</a> •
+  <a href="https://github-to-mcp.vercel.app/docs">Documentation</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#use-cases">Use Cases</a> •
+  <a href="https://github.com/nirholas/github-to-mcp/discussions">Community</a>
 </p>
 
 ## What is this?
@@ -25,16 +25,16 @@
 
 ### Why use this?
 
-- 🚀 **Instant setup** — No manual configuration, just paste a URL
-- 🤖 **Works with any AI** — Claude Desktop, ChatGPT, Cursor, VS Code Copilot, Cline, Continue, etc.
-- 📦 **Zero config** — Generates a complete, runnable MCP server with all dependencies
-- 🔍 **Smart extraction** — Automatically finds APIs, tools, and functions from OpenAPI, GraphQL, gRPC, code, and docs
+- **Instant setup** — No manual configuration, just paste a URL
+- **Works with any AI** — Claude Desktop, ChatGPT, Cursor, VS Code Copilot, Cline, Continue, etc.
+- **Zero config** — Generates a complete, runnable MCP server with all dependencies
+- **Smart extraction** — Automatically finds APIs, tools, and functions from OpenAPI, GraphQL, gRPC, code, and docs
 
 ## Quick Start
 
 ### Option 1: Web UI (Easiest)
 
-👉 **[github-to-mcp.vercel.app](https://github-to-mcp.vercel.app)**
+**[github-to-mcp.vercel.app](https://github-to-mcp.vercel.app)**
 
 Paste any GitHub URL, click Generate, download your MCP server.
 
@@ -58,13 +58,13 @@ await result.save('./my-mcp-server');
 
 | Feature | Description |
 |---------|-------------|
-| 🔄 **Universal Conversion** | Every repo gets 4 base tools: `read_file`, `list_files`, `search_code`, `get_readme` |
-| 🔍 **Smart Detection** | Extracts tools from OpenAPI/Swagger, GraphQL, gRPC/Protobuf, AsyncAPI, Python decorators, and README docs |
-| 🏷️ **Auto Classification** | Identifies repo type (API, MCP server, CLI, library, docs) to optimize extraction |
-| 🌐 **Multi-language Input** | Analyze code from TypeScript, Python, Go, Java, Kotlin, Rust, and more |
-| 🐍 **Multi-language Output** | Generate TypeScript, Python, or Go MCP servers |
-| ⚡ **Instant Deploy** | One-click Vercel deployment for hosted MCP servers |
-| 🎮 **Interactive Playground** | Test generated tools instantly in the browser before downloading |
+| **Universal Conversion** | Every repo gets 4 base tools: `read_file`, `list_files`, `search_code`, `get_readme` |
+| **Smart Detection** | Extracts tools from OpenAPI/Swagger, GraphQL, gRPC/Protobuf, AsyncAPI, Python decorators, and README docs |
+| **Auto Classification** | Identifies repo type (API, MCP server, CLI, library, docs) to optimize extraction |
+| **Multi-language Input** | Analyze code from TypeScript, Python, Go, Java, Kotlin, Rust, and more |
+| **Multi-language Output** | Generate TypeScript, Python, or Go MCP servers |
+| **Instant Deploy** | One-click Vercel deployment for hosted MCP servers |
+| **Interactive Playground** | Test generated tools instantly in the browser before downloading |
 
 ## How It Works
 
