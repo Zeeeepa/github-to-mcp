@@ -4,12 +4,6 @@
   "installCommand": "cd ../.. && pnpm install",
   "framework": "nextjs",
   "outputDirectory": ".next",
-  "functions": {
-    "app/api/edge/route.ts": {
-      "runtime": "edge",
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/docs/:path*",
