@@ -60,7 +60,7 @@ The generated MCP servers provide tools that AI assistants can invoke to read fi
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     GitHub Repository                        │
+│                     GitHub Repository                       │
 └─────────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────────┐
