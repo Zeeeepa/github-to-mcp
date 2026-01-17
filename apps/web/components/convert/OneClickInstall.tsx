@@ -165,7 +165,7 @@ export default function OneClickInstall({ result, onCopy, copied }: OneClickInst
         </div>
 
         {/* Manual config option */}
-        <div className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-neutral-800">
+        <div className="p-4 rounded-xl bg-gradient-to-br from-white/5 to-transparent border border-neutral-800 relative z-10">
           <button
             onClick={() => setShowManual(!showManual)}
             className="flex items-center justify-between w-full text-sm text-neutral-300 hover:text-white transition-colors"

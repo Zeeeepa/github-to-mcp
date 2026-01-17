@@ -393,6 +393,42 @@ export class McpSandbox {
   }
 
   /**
+   * Connect to MCP server and return session with tools
+   * This creates a persistent session that can be reused for tool execution
+   */
+  async connect(generatedCode: string): Promise<{
+    success: boolean;
+    sessionId: string;
+    tools?: McpTool[];
+    error?: string;
+  }> {
+    try {
+      const session = await this.getOrCreateSession(generatedCode);
+      resetSessionTimeout(session);
+
+      // List available tools
+      const result = await this.sendRequest<{ tools: McpTool[] }>(
+        session,
+        'tools/list',
+        {}
+      );
+
+      return {
+        success: true,
+        sessionId: session.id,
+        tools: result.tools || [],
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to connect';
+      return {
+        success: false,
+        sessionId: '',
+        error: message,
+      };
+    }
+  }
+
+  /**
    * List tools available in the MCP server
    */
   async listTools(generatedCode: string, sessionId?: string): Promise<ListToolsResponse> {

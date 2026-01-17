@@ -26,6 +26,7 @@ import {
   Zap,
   FileArchive,
   File,
+  Play,
 } from 'lucide-react';
 import type { ConversionResult as ConversionResultType } from '@/types';
 import { CLASSIFICATION_LABELS, SOURCE_TYPE_LABELS } from '@/lib/constants';
@@ -34,6 +35,7 @@ import ToolCard from './ToolCard';
 import ConfigTabs from './ConfigTabs';
 import OneClickInstall from './OneClickInstall';
 import TryInPlayground from './TryInPlayground';
+import InlinePlayground from './InlinePlayground';
 import { CodeBlock } from '@/components/ui/code-block';
 import ClaudeConfigExport from '@/components/ClaudeConfigExport';
 import ToolList from '@/components/ToolList';
@@ -44,7 +46,7 @@ interface ConversionResultProps {
   onReset: () => void;
 }
 
-type TabType = 'install' | 'tools' | 'code' | 'config';
+type TabType = 'install' | 'tools' | 'playground' | 'code' | 'config';
 
 export default function ConversionResult({ result, onReset }: ConversionResultProps) {
   const [activeTab, setActiveTab] = useState<TabType>('install');
@@ -182,6 +184,7 @@ export default function ConversionResult({ result, onReset }: ConversionResultPr
   const tabs = [
     { id: 'install' as const, label: 'Quick Install', icon: Zap, highlight: true },
     { id: 'tools' as const, label: 'Tools', icon: Package, count: result.tools.length },
+    { id: 'playground' as const, label: 'Try It', icon: Play, highlight: false },
     { id: 'code' as const, label: 'Server Code', icon: Code2 },
     { id: 'config' as const, label: 'Config', icon: FileJson },
   ];
@@ -201,10 +204,7 @@ export default function ConversionResult({ result, onReset }: ConversionResultPr
 
   return (
     <div className="space-y-6">
-      {/* Try in Playground CTA - Prominent placement */}
-      <TryInPlayground result={result} />
-
-      {/* Success header */}
+      {/* Success header - FIRST: Shows the result summary with stats and actions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -411,6 +411,13 @@ export default function ConversionResult({ result, onReset }: ConversionResultPr
             />
           )}
 
+          {activeTab === 'playground' && (
+            <InlinePlayground
+              tools={result.tools}
+              generatedCode={result.code}
+            />
+          )}
+
           {activeTab === 'code' && (
             <div className="space-y-4">
               {/* Language toggle */}
@@ -467,6 +474,9 @@ export default function ConversionResult({ result, onReset }: ConversionResultPr
           )}
         </div>
       </div>
+
+      {/* Try in Playground CTA - After install/config options */}
+      <TryInPlayground result={result} />
     </div>
   );
 }

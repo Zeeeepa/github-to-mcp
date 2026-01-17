@@ -4,18 +4,6 @@ const nextConfig = {
     serverComponentsExternalPackages: ['@octokit/rest'],
   },
   
-  // Serve MkDocs static files from /docs
-  // The docs are built to public/docs during the build process
-  async rewrites() {
-    return [
-      // Rewrite /docs to serve index.html
-      {
-        source: '/docs',
-        destination: '/docs/index.html',
-      },
-    ];
-  },
-  
   // Ensure docs directory isn't processed by Next.js
   async headers() {
     return [
