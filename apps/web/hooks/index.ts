@@ -30,7 +30,7 @@ export type {
   McpClientLog,
 } from './use-mcp-client';
 
-// Playground hooks
+// Playground hooks (legacy)
 export {
   usePlaygroundState,
   usePlaygroundNavigation,
@@ -45,3 +45,41 @@ export type {
   ExecuteToolRequest,
   ExecuteToolResponse,
 } from './use-playground-store';
+
+// ============================================================================
+// New Playground V2 Hooks
+// ============================================================================
+
+// Shared Types
+export * from './types';
+
+// Connection Hook
+export { useMcpConnection, useMcpConnectionWithRetry } from './use-mcp-connection';
+export type { UseMcpConnectionWithRetryOptions } from './use-mcp-connection';
+
+// Tools Hook
+export { useMcpTools } from './use-mcp-tools';
+
+// Resources Hook
+export { useMcpResources } from './use-mcp-resources';
+
+// Prompts Hook
+export { useMcpPrompts } from './use-mcp-prompts';
+
+// Execution History Hook
+export { 
+  useExecutionHistory,
+  filterHistoryByType,
+  filterHistoryBySuccess,
+  filterHistoryByDateRange,
+  getHistoryStats,
+} from './use-execution-history';
+export type { 
+  UseExecutionHistoryOptions,
+  HistoryStats,
+} from './use-execution-history';
+
+// Unified Playground Hook
+export {
+  usePlayground,
+} from './use-playground';

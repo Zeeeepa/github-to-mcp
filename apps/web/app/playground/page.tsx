@@ -19,6 +19,39 @@ import Playground from '@/components/Playground';
 import { Button } from '@/components/ui/button';
 import { usePlaygroundState, usePlaygroundErrors, usePlaygroundSharing } from '@/hooks/use-playground-store';
 
+// V2 Banner Component
+function V2Banner() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-6"
+    >
+      <Link
+        href="/playground/v2"
+        className="block p-4 rounded-xl border border-green-500/30 bg-green-500/10 hover:bg-green-500/20 transition-colors group"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-1 text-xs font-bold bg-green-500/20 text-green-400 rounded-full">
+              NEW
+            </span>
+            <p className="text-white font-medium">
+              Try the new Playground v2 with enhanced MCP support
+            </p>
+          </div>
+          <span className="text-green-400 group-hover:translate-x-1 transition-transform">
+            →
+          </span>
+        </div>
+        <p className="mt-2 text-sm text-neutral-400 ml-14">
+          Connect to any MCP server using STDIO, SSE, or Streamable HTTP transport.
+        </p>
+      </Link>
+    </motion.div>
+  );
+}
+
 function PlaygroundContent() {
   const searchParams = useSearchParams();
   const {
@@ -131,6 +164,9 @@ function PlaygroundContent() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
+          {/* V2 Banner */}
+          <V2Banner />
+
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-neutral-800 mb-6">
             <Terminal className="w-4 h-4 text-white" />
             <span className="text-sm font-medium text-neutral-400">

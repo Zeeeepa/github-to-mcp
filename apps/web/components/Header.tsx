@@ -9,7 +9,7 @@ import { Logo } from './Logo'
 const NAV_ITEMS = [
   { href: '/#how-it-works', label: 'How it works', icon: Zap },
   { href: '/#features', label: 'Features', icon: Sparkles },
-  { href: '/playground', label: 'Playground', icon: Terminal },
+  { href: '/playground/v2', label: 'Playground', icon: Terminal, badge: 'v2' },
   { href: '/batch', label: 'Batch Convert', icon: Layers },
   { href: '/dashboard', label: 'Dashboard', icon: Cloud },
   { href: '/docs', label: 'Docs', icon: BookOpen },
@@ -71,6 +71,11 @@ export default function Header() {
               >
                 {item.icon && <item.icon className="w-4 h-4" />}
                 {item.label}
+                {'badge' in item && item.badge && (
+                  <span className="ml-1 px-1.5 py-0.5 text-[10px] font-medium bg-green-500/20 text-green-400 rounded-full">
+                    {item.badge}
+                  </span>
+                )}
               </Link>
             ))}
           </nav>
