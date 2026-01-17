@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Github, Menu, X, Terminal, Layers, BookOpen, Cloud } from 'lucide-react'
+import { Github, Menu, X, Terminal, Layers, BookOpen, Cloud, Zap, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
 const NAV_ITEMS = [
-  { href: '/#how-it-works', label: 'How it works' },
-  { href: '/#features', label: 'Features' },
+  { href: '/#how-it-works', label: 'How it works', icon: Zap },
+  { href: '/#features', label: 'Features', icon: Sparkles },
   { href: '/playground', label: 'Playground', icon: Terminal },
   { href: '/batch', label: 'Batch Convert', icon: Layers },
   { href: '/dashboard', label: 'Dashboard', icon: Cloud },
@@ -75,6 +75,7 @@ export default function Header() {
                 href={item.href} 
                 className="flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/20 rounded px-2 py-1 -mx-2 -my-1"
               >
+                {item.icon && <item.icon className="w-4 h-4" />}
                 {item.label}
               </Link>
             ))}
@@ -150,6 +151,7 @@ export default function Header() {
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-3 px-4 py-3 text-base text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/20"
                       >
+                        {item.icon && <item.icon className="w-5 h-5" />}
                         {item.label}
                       </Link>
                     </li>

@@ -1,22 +1,22 @@
 'use client'
 
-import { Github, BookOpen } from 'lucide-react'
+import { Github, BookOpen, Zap, Sparkles, Terminal, Layers, Link2, Bug, Users, Scale } from 'lucide-react'
 import Link from 'next/link'
 
 const FOOTER_LINKS = {
   resources: [
-    { href: '/#how-it-works', label: 'How it works' },
-    { href: '/#features', label: 'Features' },
-    { href: '/playground', label: 'Playground' },
-    { href: '/batch', label: 'Batch Convert' },
+    { href: '/#how-it-works', label: 'How it works', icon: Zap },
+    { href: '/#features', label: 'Features', icon: Sparkles },
+    { href: '/playground', label: 'Playground', icon: Terminal },
+    { href: '/batch', label: 'Batch Convert', icon: Layers },
     { href: 'https://github.com/nirholas/github-to-mcp#readme', label: 'Documentation', icon: BookOpen, external: true },
-    { href: 'https://modelcontextprotocol.io', label: 'MCP Protocol', external: true },
+    { href: 'https://modelcontextprotocol.io', label: 'MCP Protocol', icon: Link2, external: true },
   ],
   project: [
     { href: 'https://github.com/nirholas/github-to-mcp', label: 'GitHub Repository', icon: Github, external: true },
-    { href: 'https://github.com/nirholas/github-to-mcp/issues', label: 'Report Issues', external: true },
-    { href: 'https://github.com/nirholas/github-to-mcp/blob/main/CONTRIBUTING.md', label: 'Contributing', external: true },
-    { href: 'https://github.com/nirholas/github-to-mcp/blob/main/LICENSE', label: 'License', external: true },
+    { href: 'https://github.com/nirholas/github-to-mcp/issues', label: 'Report Issues', icon: Bug, external: true },
+    { href: 'https://github.com/nirholas/github-to-mcp/blob/main/CONTRIBUTING.md', label: 'Contributing', icon: Users, external: true },
+    { href: 'https://github.com/nirholas/github-to-mcp/blob/main/LICENSE', label: 'License', icon: Scale, external: true },
   ],
 }
 
@@ -103,20 +103,9 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-12 pt-8 border-t border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-neutral-800 flex flex-col md:flex-row items-center justify-center gap-4">
           <div className="text-sm text-neutral-500">
             © {new Date().getFullYear()} github-to-mcp — Open Source
-          </div>
-          <div className="text-sm text-neutral-500">
-            Built with ❤️ for the AI community on{' '}
-            <a 
-              href="https://github.com/nirholas/github-to-mcp" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-white hover:underline"
-            >
-              GitHub
-            </a>
           </div>
         </div>
       </div>

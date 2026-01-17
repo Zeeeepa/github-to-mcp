@@ -7,7 +7,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, Github, Terminal, FileJson, BookOpen, Layers, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, Github, Terminal, FileJson, BookOpen, Layers, Play, Sparkles, Cloud } from 'lucide-react';
 import Link from 'next/link';
 
 const PRODUCTS = [
@@ -30,6 +30,16 @@ const PRODUCTS = [
     badge: 'Try It',
     badgeColor: 'bg-orange-500/20 text-orange-300',
     features: ['Live testing', 'Real-time results', 'Debug mode'],
+  },
+  {
+    id: 'dashboard',
+    icon: Cloud,
+    title: 'Cloud Deploy',
+    description: 'One-click deploy your MCP server to the cloud. Get instant endpoints, usage analytics, and API management.',
+    href: '/dashboard',
+    badge: 'Revolutionary',
+    badgeColor: 'bg-pink-500/20 text-pink-300',
+    features: ['Instant deploy', 'Usage dashboard', 'API keys'],
   },
   {
     id: 'batch',
