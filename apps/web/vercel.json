@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd ../.. && pnpm install && pip install -q -r mkdocs/requirements.txt && cd mkdocs && python -m mkdocs build --site-dir ../apps/web/public/docs && cd ../apps/web && pnpm run build:packages && pnpm build",
-  "installCommand": "echo 'Install handled in buildCommand'",
+  "buildCommand": "cd ../.. && pip install -q -r mkdocs/python-deps.txt && cd mkdocs && python -m mkdocs build --site-dir ../apps/web/public/docs && cd ../apps/web && pnpm run build:packages && pnpm build",
+  "installCommand": "cd ../.. && pnpm install",
   "framework": "nextjs",
   "outputDirectory": ".next",
   "headers": [

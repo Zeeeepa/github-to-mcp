@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Github, Menu, X, Terminal, Layers, BookOpen, Cloud, Zap, Sparkles } from 'lucide-react'
+import { Menu, X, Terminal, Layers, BookOpen, Cloud, Zap, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+import { Logo } from './Logo'
 
 const NAV_ITEMS = [
   { href: '/#how-it-works', label: 'How it works', icon: Zap },
