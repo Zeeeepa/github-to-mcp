@@ -1,233 +1,913 @@
 # GitHub to MCP
 
-> **Convert any GitHub repo into an MCP server in seconds** — Give Claude, ChatGPT, Cursor, Windsurf, Cline, and any AI assistant instant access to any codebase.
+Convert any GitHub repository into a Model Context Protocol (MCP) server. This tool analyzes repositories to extract APIs, functions, and documentation, then generates a complete MCP server that AI assistants can use to interact with codebases.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/nirholas/github-to-mcp)
-[![npm version](https://img.shields.io/npm/v/@nirholas/github-to-mcp.svg)](https://www.npmjs.com/package/@nirholas/github-to-mcp)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Downloads](https://img.shields.io/npm/dm/@nirholas/github-to-mcp.svg)](https://www.npmjs.com/package/@nirholas/github-to-mcp)
 
-**Featured on:** [MCP Servers Registry](https://mcpservers.org) • [Awesome MCP Servers](https://github.com/wong2/awesome-mcp-servers)
+---
 
-<p align="center">
-  <a href="https://github-to-mcp.vercel.app">Try the Web App</a> •
-  <a href="https://github-to-mcp.vercel.app/docs">Documentation</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#use-cases">Use Cases</a> •
-  <a href="https://github.com/nirholas/github-to-mcp/discussions">Community</a>
-</p>
+## Table of Contents
 
-## What is this?
+- [Introduction](#introduction)
+- [What is MCP](#what-is-mcp)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Web Interface](#web-interface)
+  - [Command Line Interface](#command-line-interface)
+  - [Programmatic API](#programmatic-api)
+- [How It Works](#how-it-works)
+  - [Repository Classification](#repository-classification)
+  - [Tool Extraction](#tool-extraction)
+  - [Code Generation](#code-generation)
+- [Generated Tools](#generated-tools)
+  - [Universal Tools](#universal-tools)
+  - [Extracted Tools](#extracted-tools)
+- [Configuration](#configuration)
+  - [Environment Variables](#environment-variables)
+  - [Generator Options](#generator-options)
+- [Integrating with AI Assistants](#integrating-with-ai-assistants)
+  - [Claude Desktop](#claude-desktop)
+  - [Cursor](#cursor)
+  - [VS Code with Continue](#vs-code-with-continue)
+  - [Other MCP Clients](#other-mcp-clients)
+- [Interactive Playground](#interactive-playground)
+- [Project Structure](#project-structure)
+- [Development](#development)
+  - [Prerequisites](#prerequisites)
+  - [Local Setup](#local-setup)
+  - [Building](#building)
+  - [Testing](#testing)
+- [Architecture Overview](#architecture-overview)
+- [Supported Input Formats](#supported-input-formats)
+- [Output Formats](#output-formats)
+- [Limitations](#limitations)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
-**GitHub to MCP** converts any GitHub repository into a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server. MCP is the open standard that lets AI assistants like **Claude**, **ChatGPT**, **Cursor**, **Windsurf**, and **Cline** interact with external tools and data.
+---
 
-**In plain English:** Paste a GitHub URL → Get an MCP server → Your AI can now read files, search code, and use the repo's APIs.
+## Introduction
 
-### Why use this?
+GitHub to MCP bridges the gap between code repositories and AI assistants. Instead of manually describing APIs or copying code snippets into chat windows, this tool generates a standardized interface that allows AI systems to programmatically explore, read, and interact with any GitHub repository.
 
-- **Instant setup** — No manual configuration, just paste a URL
-- **Works with any AI** — Claude Desktop, ChatGPT, Cursor, VS Code Copilot, Cline, Continue, etc.
-- **Zero config** — Generates a complete, runnable MCP server with all dependencies
-- **Smart extraction** — Automatically finds APIs, tools, and functions from OpenAPI, GraphQL, gRPC, code, and docs
+The generated MCP servers provide tools that AI assistants can invoke to read files, search code, list directory structures, and call API endpoints discovered within the repository. This enables AI assistants to have deep, structured access to codebases without requiring manual context management.
 
-## Quick Start
+---
 
-### Option 1: Web UI (Easiest)
+## What is MCP
 
-**[github-to-mcp.vercel.app](https://github-to-mcp.vercel.app)**
+The Model Context Protocol (MCP) is an open standard developed by Anthropic that defines how AI assistants communicate with external tools and data sources. MCP servers expose "tools" that AI models can invoke, along with "resources" that provide context and "prompts" that guide interactions.
 
-Paste any GitHub URL, click Generate, download your MCP server.
+When you connect an MCP server to an AI assistant like Claude Desktop, the assistant gains the ability to call the tools defined by that server. For example, a GitHub MCP server might expose tools like `read_file`, `search_code`, or `list_pull_requests`, which the AI can invoke to gather information needed to answer questions or complete tasks.
 
-### Option 2: CLI (One command)
+This project generates MCP servers from GitHub repositories, automatically creating tools based on the repository's contents, APIs, and documentation.
 
-```bash
-npx @nirholas/github-to-mcp https://github.com/stripe/stripe-node
-```
-
-### Option 3: Programmatic (For automation)
-
-```typescript
-import { generateFromGithub } from '@nirholas/github-to-mcp';
-
-const result = await generateFromGithub('https://github.com/stripe/stripe-node');
-console.log(`Generated ${result.tools.length} tools`);
-await result.save('./my-mcp-server');
-```
+---
 
 ## Features
 
-| Feature | Description |
-|---------|-------------|
-| **Universal Conversion** | Every repo gets 4 base tools: `read_file`, `list_files`, `search_code`, `get_readme` |
-| **Smart Detection** | Extracts tools from OpenAPI/Swagger, GraphQL, gRPC/Protobuf, AsyncAPI, Python decorators, and README docs |
-| **Auto Classification** | Identifies repo type (API, MCP server, CLI, library, docs) to optimize extraction |
-| **Multi-language Input** | Analyze code from TypeScript, Python, Go, Java, Kotlin, Rust, and more |
-| **Multi-language Output** | Generate TypeScript, Python, or Go MCP servers |
-| **Instant Deploy** | One-click Vercel deployment for hosted MCP servers |
-| **Interactive Playground** | Test generated tools instantly in the browser before downloading |
+### Repository Analysis
+
+- Automatic repository type classification (API, library, CLI tool, MCP server, documentation)
+- Detection and parsing of OpenAPI/Swagger specifications
+- GraphQL schema extraction and query/mutation tool generation
+- gRPC/Protobuf service definition parsing
+- AsyncAPI specification support for event-driven APIs
+- Source code analysis for function extraction
+
+### Multi-Language Support
+
+Input repositories can be written in:
+- TypeScript and JavaScript
+- Python
+- Go
+- Java and Kotlin
+- Rust
+- Ruby
+- C# and F#
+
+Output MCP servers can be generated in:
+- TypeScript (using the official MCP SDK)
+- Python (using the MCP Python SDK)
+- Go (using community MCP libraries)
+
+### Tool Extraction
+
+- OpenAPI endpoints become callable tools with typed parameters
+- GraphQL queries and mutations become tools with input validation
+- Python functions decorated with `@mcp.tool` are preserved
+- CLI commands documented in READMEs become executable tools
+- HTTP route handlers from popular frameworks are detected
+
+### Code Generation
+
+- Complete, runnable MCP server code with all dependencies
+- Configuration files for Claude Desktop, Cursor, and other clients
+- Docker deployment templates
+- TypeScript type definitions for all generated tools
+
+---
+
+## Installation
+
+### From Source
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/nirholas/github-to-mcp.git
+cd github-to-mcp
+pnpm install
+pnpm build
+```
+
+### Using the Web Interface
+
+The web application is deployed at the project's Vercel deployment. Visit the deployment URL to use the browser-based interface without any local installation.
+
+---
+
+## Usage
+
+### Web Interface
+
+The web interface provides the simplest way to convert repositories:
+
+1. Navigate to the web application
+2. Enter a GitHub repository URL (e.g., `https://github.com/owner/repo`)
+3. Optionally configure extraction options
+4. Click "Generate" to analyze the repository
+5. Review the generated tools and code
+6. Download the MCP server package or copy the configuration
+
+The web interface also provides an interactive playground where you can test generated tools before downloading.
+
+### Command Line Interface
+
+After building the project locally, you can use the CLI:
+
+```bash
+# Basic usage
+node packages/core/dist/cli.mjs https://github.com/owner/repo
+
+# Specify output directory
+node packages/core/dist/cli.mjs https://github.com/owner/repo --output ./my-mcp-server
+
+# Generate Python instead of TypeScript
+node packages/core/dist/cli.mjs https://github.com/owner/repo --language python
+
+# Include only specific extraction sources
+node packages/core/dist/cli.mjs https://github.com/owner/repo --sources openapi,readme
+
+# Use a GitHub token for private repos or higher rate limits
+GITHUB_TOKEN=ghp_xxx node packages/core/dist/cli.mjs https://github.com/owner/repo
+```
+
+### Programmatic API
+
+Import the generator in your own TypeScript or JavaScript code:
+
+```typescript
+import { GithubToMcpGenerator } from '@nirholas/github-to-mcp';
+
+const generator = new GithubToMcpGenerator({
+  githubToken: process.env.GITHUB_TOKEN,
+  sources: ['openapi', 'readme', 'code'],
+  outputLanguage: 'typescript'
+});
+
+const result = await generator.generate('https://github.com/owner/repo');
+
+console.log(`Repository: ${result.name}`);
+console.log(`Classification: ${result.classification.type}`);
+console.log(`Generated ${result.tools.length} tools`);
+
+// Access the generated code
+console.log(result.code);
+
+// Save to disk
+await result.save('./output-directory');
+```
+
+#### Generator Options
+
+```typescript
+interface GithubToMcpOptions {
+  // GitHub personal access token for API authentication
+  githubToken?: string;
+  
+  // Which sources to extract tools from
+  // Default: ['openapi', 'readme', 'code', 'graphql', 'mcp']
+  sources?: Array<'openapi' | 'readme' | 'code' | 'graphql' | 'grpc' | 'mcp'>;
+  
+  // Output language for generated server
+  // Default: 'typescript'
+  outputLanguage?: 'typescript' | 'python' | 'go';
+  
+  // Include universal tools (read_file, list_files, etc.)
+  // Default: true
+  includeUniversalTools?: boolean;
+  
+  // Maximum number of tools to generate
+  // Default: 100
+  maxTools?: number;
+  
+  // Specific branch to analyze
+  // Default: repository's default branch
+  branch?: string;
+}
+```
+
+---
 
 ## How It Works
 
+The conversion process follows these stages:
+
+### Repository Classification
+
+The generator first analyzes the repository to determine its type and structure:
+
+1. Fetch repository metadata from the GitHub API
+2. Download and parse the README file
+3. Examine package.json, setup.py, go.mod, or other manifest files
+4. Scan for API specification files (openapi.json, schema.graphql, etc.)
+5. Classify the repository as one of:
+   - `mcp-server`: An existing MCP server implementation
+   - `api-sdk`: A client library for an API
+   - `cli-tool`: A command-line application
+   - `library`: A general-purpose code library
+   - `documentation`: Primarily documentation content
+   - `data`: Data files or datasets
+   - `unknown`: Unclassified repository
+
+Classification influences which extraction strategies are prioritized and how tools are named.
+
+### Tool Extraction
+
+Tools are extracted from multiple sources within the repository:
+
+#### OpenAPI/Swagger Extraction
+
+When an OpenAPI specification is found:
+1. Parse the specification (JSON or YAML, v2 or v3)
+2. Extract each endpoint as a potential tool
+3. Convert path parameters, query parameters, and request bodies to tool input schemas
+4. Generate descriptions from operation summaries and descriptions
+5. Map HTTP methods to appropriate tool semantics
+
+#### GraphQL Extraction
+
+When GraphQL schemas are found:
+1. Parse .graphql or .gql schema files
+2. Extract Query type fields as read-only tools
+3. Extract Mutation type fields as write tools
+4. Convert GraphQL input types to JSON Schema for tool inputs
+5. Handle nested types and custom scalars
+
+#### README Extraction
+
+The README is analyzed for:
+1. Code blocks showing CLI usage patterns
+2. API endpoint examples with curl or fetch
+3. Function call examples with parameters
+4. Installation and usage instructions
+
+Extracted examples become tools with inferred parameter schemas.
+
+#### Source Code Extraction
+
+For supported languages, the source code is analyzed:
+1. Python: Functions decorated with `@mcp.tool`, `@server.tool`, or similar
+2. TypeScript: Exported functions with JSDoc annotations
+3. Go: HTTP handlers from Gin, Echo, Chi, Fiber, or Gorilla Mux
+4. Java/Kotlin: Methods annotated with `@GetMapping`, `@PostMapping`, etc.
+5. Rust: Route handlers from Actix-web, Axum, or Rocket
+
+#### MCP Server Introspection
+
+If the repository is already an MCP server:
+1. Detect `server.tool()` definitions
+2. Extract tool names, descriptions, and schemas
+3. Preserve existing tool implementations where possible
+
+### Code Generation
+
+After tools are extracted, the generator produces:
+
+1. A main server file implementing the MCP protocol
+2. Tool handler functions for each extracted tool
+3. Type definitions for all input and output schemas
+4. A package.json or equivalent with required dependencies
+5. Configuration files for popular MCP clients
+6. Optional Docker deployment files
+
+The generated code is complete and runnable without modification.
+
+---
+
+## Generated Tools
+
+### Universal Tools
+
+Every generated MCP server includes these baseline tools for repository exploration:
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `get_readme` | Retrieve the repository's README content | None |
+| `list_files` | List files and directories at a given path | `path` (optional, defaults to root) |
+| `read_file` | Read the contents of a specific file | `path` (required) |
+| `search_code` | Search for patterns across the repository | `query` (required), `path` (optional) |
+
+These tools ensure that even if no APIs or functions are detected, the AI assistant can still explore and understand the repository.
+
+### Extracted Tools
+
+Additional tools are generated based on repository contents:
+
+#### From OpenAPI Specifications
+
+Each API endpoint becomes a tool:
+
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     GitHub Repository                        │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│  1. Fetch & Classify  →  Detect repo type (API/CLI/Lib)     │
-│  2. Extract Tools     →  OpenAPI, GraphQL, gRPC, Code, README│
-│  3. Generate Server   →  TypeScript or Python MCP server    │
-│  4. Bundle Output     →  Complete package with dependencies │
-└─────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────┐
-│              Ready-to-use MCP Server + Config               │
-└─────────────────────────────────────────────────────────────┘
+POST /users -> create_user(name: string, email: string)
+GET /users/{id} -> get_user(id: string)
+PUT /users/{id} -> update_user(id: string, name?: string, email?: string)
+DELETE /users/{id} -> delete_user(id: string)
+GET /users -> list_users(page?: number, limit?: number)
 ```
 
-## What Tools Get Generated?
+#### From GraphQL Schemas
 
-### Universal Tools (Always included)
+Queries and mutations become tools:
 
-| Tool | What it does |
-|------|--------------|
-| `get_readme` | Fetch the README for context |
-| `list_files` | Browse the directory structure |
-| `read_file` | Read any file's contents |
-| `search_code` | Search for code patterns |
+```graphql
+type Query {
+  user(id: ID!): User         -> get_user(id: string)
+  users(first: Int): [User]   -> list_users(first?: number)
+}
 
-### Extracted Tools (Depends on repo type)
+type Mutation {
+  createUser(input: CreateUserInput!): User -> create_user(input: object)
+}
+```
 
-| Repo Type | What we extract |
-|-----------|-----------------|
-| **REST APIs** | All endpoints from OpenAPI/Swagger specs |
-| **GraphQL APIs** | Queries and mutations from schema |
-| **gRPC Services** | RPC methods from .proto files |
-| **AsyncAPI** | Event-driven API operations |
-| **Python packages** | Functions with `@mcp.tool` decorators |
-| **Go packages** | HTTP handlers from Gin, Echo, Chi, Fiber, Gorilla |
-| **Java/Kotlin** | Spring Boot, JAX-RS, Micronaut endpoints |
-| **Rust** | Actix-web, Axum, Rocket route handlers |
-| **MCP servers** | Existing `server.tool()` definitions |
-| **CLIs** | Commands documented in README |
+#### From Python Code
 
-## Use Cases
+```python
+@server.tool()
+async def analyze_sentiment(text: str) -> str:
+    """Analyze the sentiment of the given text."""
+    # Implementation
+```
 
-- **"I want Claude to understand my codebase"** → Generate an MCP server, add to Claude Desktop
-- **"I want to query the Stripe API from ChatGPT"** → Convert stripe/stripe-node, get typed tools
-- **"I want Cursor to use my internal SDK"** → Point at your private repo (with token)
-- **"I want to wrap any REST API for AI"** → Convert any repo with an OpenAPI spec
-
-## Interactive Playground
-
-After converting a repository, click **"Open in Playground"** to test your tools instantly:
-
-- **Execute tools** — Run any generated tool with custom parameters
-- **View responses** — See JSON results in real-time
-- **Share links** — Generate shareable playground URLs
-
-### Sharing Playground Links
-
-Share your generated tools with others using URL parameters:
+Becomes:
 
 ```
-# Share with base64-encoded code
-https://github-to-mcp.vercel.app/playground?code=<base64>&name=my-server
-
-# Share via GitHub Gist
-https://github-to-mcp.vercel.app/playground?gist=<gist-id>
+analyze_sentiment(text: string) -> "Analyze the sentiment of the given text."
 ```
+
+#### From README Examples
+
+CLI commands documented in READMEs:
+
+```bash
+# Create a new project
+mycli create --name myproject --template typescript
+```
+
+Becomes:
+
+```
+mycli_create(name: string, template?: string)
+```
+
+---
 
 ## Configuration
 
 ### Environment Variables
 
-```bash
-# Optional: Increase GitHub API rate limits (anonymous = 60/hr, authenticated = 5000/hr)
-GITHUB_TOKEN=ghp_xxxxxxxxxxxxx
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `GITHUB_TOKEN` | GitHub personal access token for API access | No (but recommended) |
+| `GITHUB_API_URL` | Custom GitHub API URL for Enterprise | No |
+
+#### GitHub Token
+
+Without a token, GitHub API requests are limited to 60 per hour. With a token, the limit increases to 5,000 per hour. For private repositories, a token with appropriate access is required.
+
+Create a token at: https://github.com/settings/tokens
+
+Required scopes:
+- `repo` (for private repositories)
+- `public_repo` (for public repositories only)
+
+### Generator Options
+
+When using the programmatic API, you can configure:
+
+```typescript
+const generator = new GithubToMcpGenerator({
+  // Authentication
+  githubToken: process.env.GITHUB_TOKEN,
+  
+  // Extraction sources to enable
+  sources: ['openapi', 'readme', 'code', 'graphql', 'grpc', 'mcp'],
+  
+  // Output configuration
+  outputLanguage: 'typescript', // or 'python', 'go'
+  
+  // Tool filtering
+  includeUniversalTools: true,
+  maxTools: 100,
+  
+  // Repository options
+  branch: 'main', // specific branch to analyze
+});
 ```
 
-### Claude Desktop Integration
+---
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+## Integrating with AI Assistants
+
+### Claude Desktop
+
+Add the generated server to your Claude Desktop configuration:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "my-repo": {
       "command": "node",
-      "args": ["/path/to/generated/server.mjs"]
+      "args": ["/absolute/path/to/generated/server.mjs"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_xxxx"
+      }
     }
   }
 }
 ```
 
-## Development
+Restart Claude Desktop after modifying the configuration.
+
+### Cursor
+
+Cursor supports MCP servers through its settings. Add the server path in Cursor's MCP configuration panel, or edit the configuration file directly:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "my-repo": {
+        "command": "node",
+        "args": ["/path/to/server.mjs"]
+      }
+    }
+  }
+}
+```
+
+### VS Code with Continue
+
+If using the Continue extension for VS Code:
+
+```json
+{
+  "models": [...],
+  "mcpServers": {
+    "my-repo": {
+      "command": "node",
+      "args": ["/path/to/server.mjs"]
+    }
+  }
+}
+```
+
+### Other MCP Clients
+
+Any MCP-compatible client can use the generated servers. The server communicates over stdio by default, accepting JSON-RPC messages on stdin and responding on stdout.
+
+To run manually:
 
 ```bash
-git clone https://github.com/nirholas/github-to-mcp
-cd github-to-mcp
-pnpm install
-pnpm build
-pnpm dev      # Start web UI at localhost:3000
-pnpm test     # Run tests
+node server.mjs
 ```
+
+The server will wait for MCP protocol messages on stdin.
+
+---
+
+## Interactive Playground
+
+The web application includes an interactive playground for testing generated tools:
+
+1. After generating tools from a repository, click "Open in Playground"
+2. Select a tool from the list
+3. Fill in the required parameters
+4. Click "Execute" to run the tool
+5. View the JSON response
+
+The playground executes tools in a sandboxed environment and displays results in real-time.
+
+### Sharing Playground Sessions
+
+You can share your generated tools with others:
+
+**URL Parameters**:
+- `?code=<base64>` - Base64-encoded TypeScript server code
+- `?gist=<id>` - GitHub Gist ID containing server code
+- `?name=<name>` - Display name for the server
+
+Example:
+```
+https://your-deployment.vercel.app/playground?gist=abc123&name=My%20API
+```
+
+---
 
 ## Project Structure
 
 ```
 github-to-mcp/
-├── packages/
-│   ├── core/           # Conversion engine (npm package)
-│   ├── openapi-parser/ # OpenAPI/GraphQL/gRPC parser
-│   └── mcp-server/     # MCP server implementation
 ├── apps/
-│   ├── web/            # Next.js web UI + documentation
-│   └── vscode/         # VS Code extension
-├── mkdocs/             # Documentation source (MkDocs)
-└── tests/              # Integration tests
+│   ├── web/                    # Next.js web application
+│   │   ├── app/                # Next.js App Router pages
+│   │   │   ├── api/            # API routes for conversion
+│   │   │   ├── convert/        # Conversion page
+│   │   │   ├── playground/     # Interactive playground
+│   │   │   └── dashboard/      # User dashboard
+│   │   ├── components/         # React components
+│   │   ├── hooks/              # Custom React hooks
+│   │   ├── lib/                # Utility functions
+│   │   └── types/              # TypeScript type definitions
+│   └── vscode/                 # VS Code extension (in development)
+│
+├── packages/
+│   ├── core/                   # Main conversion engine
+│   │   └── src/
+│   │       ├── index.ts        # GithubToMcpGenerator class
+│   │       ├── github-client.ts    # GitHub API client
+│   │       ├── readme-extractor.ts # README parsing
+│   │       ├── code-extractor.ts   # Source code analysis
+│   │       ├── graphql-extractor.ts # GraphQL schema parsing
+│   │       ├── mcp-introspector.ts  # Existing MCP server detection
+│   │       ├── python-generator.ts  # Python output generation
+│   │       ├── go-generator.ts      # Go output generation
+│   │       └── types.ts             # Type definitions
+│   │
+│   ├── openapi-parser/         # OpenAPI specification parser
+│   │   └── src/
+│   │       ├── parser.ts       # OpenAPI parsing logic
+│   │       ├── analyzer.ts     # Endpoint analysis
+│   │       ├── transformer.ts  # Schema transformation
+│   │       └── generator.ts    # Tool generation
+│   │
+│   ├── mcp-server/             # MCP server utilities
+│   │   └── src/
+│   │       ├── server.ts       # Base MCP server implementation
+│   │       └── tools.ts        # Tool registration helpers
+│   │
+│   └── registry/               # Tool registry management
+│       └── src/
+│           └── index.ts        # Registry operations
+│
+├── mkdocs/                     # Documentation site (MkDocs)
+│   ├── docs/                   # Markdown documentation
+│   └── mkdocs.yml              # MkDocs configuration
+│
+├── tests/                      # Integration tests
+│   ├── fixtures/               # Test fixture repositories
+│   │   ├── express-app/        # Express.js test app
+│   │   ├── fastapi-app/        # FastAPI test app
+│   │   ├── graphql/            # GraphQL test schemas
+│   │   └── openapi/            # OpenAPI test specs
+│   └── integration/            # Integration test files
+│
+├── templates/                  # Code generation templates
+│   ├── Dockerfile.python.template
+│   └── Dockerfile.typescript.template
+│
+├── package.json                # Root package configuration
+├── pnpm-workspace.yaml         # pnpm workspace configuration
+├── tsconfig.json               # TypeScript configuration
+└── vitest.config.ts            # Test configuration
 ```
-
-## FAQ
-
-<details>
-<summary><strong>Does this work with private repositories?</strong></summary>
-
-Yes! Set the `GITHUB_TOKEN` environment variable with a token that has access to your private repos.
-</details>
-
-<details>
-<summary><strong>What AI assistants support MCP?</strong></summary>
-
-Claude Desktop, Cursor, Cline, Continue, Windsurf, and any tool that implements the Model Context Protocol. ChatGPT support varies by integration.
-</details>
-
-<details>
-<summary><strong>Can I customize the generated tools?</strong></summary>
-
-Yes! The generated code is plain TypeScript/Python — edit it however you want. Or use the programmatic API to modify tools before saving.
-</details>
-
-<details>
-<summary><strong>Is this related to Anthropic's MCP?</strong></summary>
-
-We implement the [Model Context Protocol](https://modelcontextprotocol.io) open standard created by Anthropic. This tool helps you create MCP servers without writing boilerplate.
-</details>
-
-## Related Projects
-
-- [Model Context Protocol](https://modelcontextprotocol.io) — The protocol specification
-- [MCP Servers](https://github.com/modelcontextprotocol/servers) — Official MCP server examples
-- [Claude Desktop](https://claude.ai/download) — AI assistant with MCP support
-
-## License
-
-Apache 2.0 — See [LICENSE](LICENSE) for details.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 
 ---
 
-**Built by [nirholas](https://github.com/nirholas)** • [Website](https://github-to-mcp.vercel.app) • [npm](https://www.npmjs.com/package/@nirholas/github-to-mcp)
+## Development
+
+### Prerequisites
+
+- Node.js 22.x or later
+- pnpm 10.x or later
+- Git 2.x or later
+
+### Local Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/nirholas/github-to-mcp.git
+cd github-to-mcp
+
+# Install dependencies
+pnpm install
+
+# Build all packages
+pnpm build
+
+# Start the development server
+pnpm dev
+```
+
+The web application will be available at `http://localhost:3000`.
+
+### Building
+
+```bash
+# Build all packages
+pnpm build
+
+# Build specific package
+pnpm --filter @nirholas/github-to-mcp build
+pnpm --filter @github-to-mcp/openapi-parser build
+pnpm --filter web build
+```
+
+### Testing
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run specific test file
+pnpm test -- tests/integration/openapi-conversion.test.ts
+```
+
+### Code Quality
+
+```bash
+# Run linting
+pnpm lint
+
+# Type checking
+pnpm typecheck
+```
+
+---
+
+## Architecture Overview
+
+The system follows a pipeline architecture:
+
+```
+Input (GitHub URL)
+       |
+       v
++------------------+
+| GitHub Client    |  Fetches repository metadata, files, and README
++------------------+
+       |
+       v
++------------------+
+| Classifier       |  Determines repository type and structure
++------------------+
+       |
+       v
++------------------+
+| Extractors       |  Multiple extractors run in parallel:
+| - OpenAPI        |  - Parse API specifications
+| - GraphQL        |  - Parse GraphQL schemas
+| - README         |  - Extract examples from documentation
+| - Code           |  - Analyze source code
+| - MCP            |  - Detect existing MCP tools
++------------------+
+       |
+       v
++------------------+
+| Deduplicator     |  Removes duplicate tools, merges similar ones
++------------------+
+       |
+       v
++------------------+
+| Validator        |  Validates tool schemas, adds confidence scores
++------------------+
+       |
+       v
++------------------+
+| Generator        |  Produces output code in target language
++------------------+
+       |
+       v
+Output (MCP Server Code + Configuration)
+```
+
+Each extractor produces a list of `ExtractedTool` objects with a standardized schema. The deduplicator and validator ensure consistency before the generator produces the final output.
+
+---
+
+## Supported Input Formats
+
+### API Specifications
+
+| Format | File Patterns | Version Support |
+|--------|---------------|-----------------|
+| OpenAPI | `openapi.json`, `openapi.yaml`, `swagger.json`, `swagger.yaml`, `api.json`, `api.yaml` | 2.0, 3.0.x, 3.1.x |
+| GraphQL | `schema.graphql`, `*.gql`, `schema.json` | June 2018 spec |
+| gRPC | `*.proto` | proto3 |
+| AsyncAPI | `asyncapi.json`, `asyncapi.yaml` | 2.x |
+
+### Source Code Languages
+
+| Language | Framework Detection |
+|----------|---------------------|
+| TypeScript/JavaScript | Express, Fastify, Hono, Next.js API routes |
+| Python | FastAPI, Flask, Django REST, MCP SDK decorators |
+| Go | Gin, Echo, Chi, Fiber, Gorilla Mux |
+| Java | Spring Boot, JAX-RS, Micronaut |
+| Kotlin | Ktor, Spring Boot |
+| Rust | Actix-web, Axum, Rocket |
+| Ruby | Rails, Sinatra, Grape |
+
+---
+
+## Output Formats
+
+### TypeScript Server
+
+The default output is a TypeScript MCP server using the official `@modelcontextprotocol/sdk` package:
+
+```typescript
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+
+const server = new Server({
+  name: 'generated-server',
+  version: '1.0.0',
+}, {
+  capabilities: {
+    tools: {},
+  },
+});
+
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [/* generated tools */],
+}));
+
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  // Tool dispatch logic
+});
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+### Python Server
+
+Python output uses the MCP Python SDK:
+
+```python
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+
+server = Server("generated-server")
+
+@server.tool()
+async def example_tool(param: str) -> str:
+    """Tool description."""
+    # Implementation
+    
+async def main():
+    async with stdio_server() as (read_stream, write_stream):
+        await server.run(read_stream, write_stream)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+```
+
+### Configuration Files
+
+Each generated server includes:
+
+- `claude_desktop_config.json` - Claude Desktop configuration snippet
+- `cursor_config.json` - Cursor editor configuration
+- `package.json` or `requirements.txt` - Dependencies
+- `Dockerfile` (optional) - Container deployment
+
+---
+
+## Limitations
+
+### GitHub API Rate Limits
+
+- Unauthenticated requests: 60 per hour
+- Authenticated requests: 5,000 per hour
+- Large repositories may require multiple API calls
+
+Provide a `GITHUB_TOKEN` to increase rate limits.
+
+### Repository Size
+
+- Very large repositories (>1GB) may time out during analysis
+- Repositories with thousands of files may hit API limits
+- Consider analyzing specific subdirectories for monorepos
+
+### Tool Extraction Accuracy
+
+- OpenAPI specs produce the most accurate tools
+- README extraction relies on consistent documentation formatting
+- Source code analysis may miss dynamically defined routes
+- Confidence scores indicate extraction reliability
+
+### Language Support
+
+- TypeScript output is the most mature
+- Python output is functional but may require minor edits
+- Go output is experimental
+
+---
+
+## Troubleshooting
+
+### "Rate limit exceeded" errors
+
+Provide a GitHub token:
+```bash
+export GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+```
+
+### "Repository not found" errors
+
+- Verify the URL is correct
+- For private repositories, ensure your token has `repo` scope
+- Check that the repository exists and is accessible
+
+### "No tools extracted" results
+
+- Verify the repository contains API definitions or documented endpoints
+- Try enabling all extraction sources: `--sources openapi,readme,code,graphql,mcp`
+- Check that specification files follow standard naming conventions
+
+### Generated server fails to start
+
+- Ensure Node.js 22+ is installed
+- Run `npm install` in the generated directory
+- Check for TypeScript compilation errors with `npx tsc --noEmit`
+
+### Claude Desktop does not show the server
+
+- Verify the path in `claude_desktop_config.json` is absolute
+- Restart Claude Desktop after configuration changes
+- Check Claude Desktop logs for connection errors
+
+---
+
+## Contributing
+
+Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
+
+- Setting up the development environment
+- Code style and formatting requirements
+- Testing requirements
+- Pull request process
+
+### Reporting Issues
+
+When reporting issues, please include:
+
+- Repository URL that caused the issue (if public)
+- Error messages or unexpected behavior
+- Node.js and pnpm versions
+- Operating system
+
+---
+
+## License
+
+Apache 2.0. See [LICENSE](LICENSE) for details.
+
+---
+
+## Links
+
+- [Model Context Protocol Specification](https://modelcontextprotocol.io)
+- [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
+- [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
+- [Claude Desktop](https://claude.ai/download)
+
+---
+
+Built and maintained by [nirholas](https://github.com/nirholas)
