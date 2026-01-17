@@ -866,7 +866,7 @@ function parseZodSchema(schemaBody: string): Tool['inputSchema'] {
   while ((match = propPattern.exec(schemaBody)) !== null) {
     const [fullMatch, propName, zodType, enumValues, , description, defaultValue] = match;
     
-    const prop: Record<string, unknown> = {
+    const prop: { type: string; description?: string; enum?: string[]; default?: unknown } = {
       type: zodType === 'array' ? 'array' : zodType === 'enum' ? 'string' : zodType,
     };
     
