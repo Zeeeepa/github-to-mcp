@@ -1,0 +1,42 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.nirholas/github-to-mcp",
+  "title": "GitHub to MCP Converter",
+  "description": "Convert GitHub repos to MCP servers - OpenAPI GraphQL REST extraction TypeScript Python generation",
+  "version": "1.0.0",
+  "keywords": [
+    "github",
+    "converter",
+    "generator",
+    "openapi",
+    "graphql",
+    "rest",
+    "typescript",
+    "python",
+    "code-generation",
+    "api",
+    "tools",
+    "claude",
+    "cursor",
+    "windsurf",
+    "vscode",
+    "mcp",
+    "ai",
+    "llm",
+    "automation"
+  ],
+  "repository": {
+    "url": "https://github.com/nirholas/github-to-mcp",
+    "source": "github"
+  },
+  "license": "MIT",
+  "packages": [
+    {
+      "registryType": "source",
+      "url": "https://github.com/nirholas/github-to-mcp",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
